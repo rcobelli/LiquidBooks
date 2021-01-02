@@ -1,7 +1,7 @@
 # Liquid Books
 ##### A bookkeeping system that helps you manage your small business accounting
 
-![Screenshot](screenshots/year.png)
+![Screenshot](images/year.png)
 
 ## How It Works
 1. Add all of your clients through the `Manage Clients` tab
@@ -15,7 +15,7 @@
   - Automatically generated forecasts based off of historical data
   - Automatically attach credit card fees to income transactions
   
-![Forecast](screenshots/forecast.png)
+![Forecast](images/forecast.png)
 
 ## Installation
 1. Create a new table in your MySQL DB

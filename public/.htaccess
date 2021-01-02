@@ -1,0 +1,7 @@
+Options All -Indexes
+
+DirectoryIndex index.php
+
+RewriteEngine On
+
+RewriteRule ^(.*)\.ics$ $1.php [L]

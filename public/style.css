@@ -1,0 +1,89 @@
+tr.clickable-row {
+    cursor: pointer;
+}
+
+input, textarea {
+    color: black !important;
+}
+
+.accounting td,.accounting th {
+    font-size: 14px;
+    padding: 0.25rem;
+}
+
+th {
+    text-align: left;
+}
+
+a:link, a:hover, a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* change the background color */
+.navbar-custom {
+    background-color: #21A675;
+}
+/* change the brand and text color */
+.navbar-custom .navbar-brand {
+    color: rgb(255,255,255) !important;
+}
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+    color: rgba(255,255,255,.5);
+}
+/* change the color of active or hovered links */
+.navbar-custom .nav-item.active .nav-link,
+.navbar-custom .nav-item:focus .nav-link,
+.navbar-custom .nav-item:hover .nav-link {
+    color: #ffffff;
+}
+
+.cal {
+    border:#808080 1px solid;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.cal th {
+    text-align: center;
+    width: 14.28%;
+}
+
+.cal td {
+    min-height: 100px;
+    height: 100px;
+    vertical-align: top;
+}
+
+.cal td h5 {
+    text-align: right;
+}
+
+.yellow {
+    background-color: #FFFDA2;
+    color: black;
+}
+
+/*noinspection CssUnusedSymbol*/
+.red {
+    background-color: #F5837C;
+    color: black;
+}
+
+.green {
+    background-color: #6CB83A;
+    color: black;
+}
+
+/*noinspection CssUnusedSymbol*/
+.orange {
+    background-color: orange;
+    color: black;
+}
+
+/*noinspection CssUnusedSymbol*/
+.blue {
+    background-color: #748EFF;
+    color: white;
+}

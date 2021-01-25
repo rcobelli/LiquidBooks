@@ -38,7 +38,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Q1</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-03-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-03-31')) . "</td>";
             }
             ?>
         </tr>
@@ -46,7 +46,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Q2</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-04-01', $year . '-06-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-04-01', $year . '-06-30')) . "</td>";
             }
             ?>
         </tr>
@@ -54,7 +54,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Q3</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-07-01', $year . '-09-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-07-01', $year . '-09-30')) . "</td>";
             }
             ?>
         </tr>
@@ -62,7 +62,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Q4</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-10-01', $year . '-12-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-10-01', $year . '-12-31')) . "</td>";
             }
             ?>
         </tr>
@@ -70,7 +70,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th colspan="2">Total</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<th>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-12-t')) . "</th>";
+                echo "<th>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</th>";
             }
             ?>
         </tr>
@@ -79,7 +79,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Q1</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-03-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-03-31')) . "</td>";
             }
             ?>
         </tr>
@@ -87,7 +87,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Q2</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-04-01', $year . '-06-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-04-01', $year . '-06-30')) . "</td>";
             }
             ?>
         </tr>
@@ -95,7 +95,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Q3</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-07-01', $year . '-09-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-07-01', $year . '-09-30')) . "</td>";
             }
             ?>
         </tr>
@@ -103,7 +103,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Q4</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-10-01', $year . '-12-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-10-01', $year . '-12-31')) . "</td>";
             }
             ?>
         </tr>
@@ -111,7 +111,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th colspan="2">Total</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<th>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-t')) . "</th>";
+                echo "<th>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-31')) . "</th>";
             }
             ?>
         </tr>
@@ -122,7 +122,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th colspan="2">Total Profit</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<th>" . totalTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-t'), $transHeper->getExpenses($year . '-01-01', $year . '-12-t')) . "</th>";
+                echo "<th>" . totalTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-31'), $transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</th>";
             }
             ?>
         </tr>
@@ -130,7 +130,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th colspan="2">Total Margin</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<th>" . calculateMargin($transHeper->getIncome($year . '-01-01', $year . '-12-t'), $transHeper->getExpenses($year . '-01-01', $year . '-12-t')) . "</th>";
+                echo "<th>" . calculateMargin($transHeper->getIncome($year . '-01-01', $year . '-12-31'), $transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</th>";
             }
             ?>
         </tr>

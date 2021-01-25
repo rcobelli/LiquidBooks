@@ -9,21 +9,21 @@ class TransactionHelper extends Helper
     }
 
     public function getExpenses($startDate, $endDate) {
-        return $this->query("SELECT * FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ?", date($startDate), date($endDate));
+        return $this->query("SELECT * FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ?", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getExpensesByCategory($categoryID, $startDate, $endDate)
     {
-        return $this->query("SELECT * FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ?", $categoryID, date($startDate), date($endDate));
+        return $this->query("SELECT * FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ?", $categoryID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getIncome($startDate, $endDate) {
-        return $this->query("SELECT * FROM Transactions WHERE clientID IS NOT NULL AND date >= ? AND date <= ?", date($startDate), date($endDate));
+        return $this->query("SELECT * FROM Transactions WHERE clientID IS NOT NULL AND date >= ? AND date <= ?", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getIncomeByClient($clientID, $startDate, $endDate)
     {
-        return $this->query("SELECT * FROM Transactions WHERE clientID = ? AND date >= ? AND date <= ?", $clientID, date($startDate), date($endDate));
+        return $this->query("SELECT * FROM Transactions WHERE clientID = ? AND date >= ? AND date <= ?", $clientID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function estimateExpensesByCategory($categoryID, $year, $month) {
@@ -118,6 +118,14 @@ class TransactionHelper extends Helper
             }
 
             return $this->query("INSERT INTO Transactions (title, amount, date, categoryID) VALUES (?, ?, ?, ?)", $data['title'], $newAmount, $data['date'], $data['category']);
+        }
+    }
+    private function normalizeDate($input) {
+        if (strpos($input, "-t") === false) {
+            return date($input);
+        } else {
+            $components = explode("-", $input);
+            return date($input, strtotime($components[0] . '-'. $components . '-01'));
         }
     }
 }

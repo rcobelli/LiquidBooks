@@ -155,7 +155,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Expenses</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-12-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</td>";
             }
             ?>
             <td>$<?php echo number_format($expensesTotal, 2); ?></td>
@@ -165,7 +165,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Income</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-t')) . "</td>";
+                echo "<td>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-31')) . "</td>";
             }
             ?>
             <td>$<?php echo number_format($incomeTotal, 2); ?></td>
@@ -174,7 +174,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Total Profit</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . totalTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-t'), $transHeper->getExpenses($year . '-01-01', $year . '-12-t')) . "</td>";
+                echo "<td>" . totalTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-31'), $transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</td>";
             }
             ?>
             <td>$<?php echo number_format($incomeTotal - $expensesTotal, 2); ?></td>
@@ -183,7 +183,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
             <th>Total Margin</th>
             <?php
             foreach ($data as $year => $datum) {
-                echo "<td>" . calculateMargin($transHeper->getIncome($year . '-01-01', $year . '-12-t'), $transHeper->getExpenses($year . '-01-01', $year . '-12-t')) . "</td>";
+                echo "<td>" . calculateMargin($transHeper->getIncome($year . '-01-01', $year . '-12-31'), $transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</td>";
             }
             ?>
             <td><?php echo number_format((1 - ($expensesTotal / $incomeTotal)) * 100, 2) ?>%</td>

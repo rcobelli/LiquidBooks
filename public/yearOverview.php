@@ -62,7 +62,7 @@ if ($currentYear) {
                         echo "<td onclick='window.open(\"viewDetail.php?cat=" . $category['categoryID'] . "&month=" . $i . "&year=" . $year . "\", \"View Transactions\", \"width=500,height=700\")'>" . sumTransactions($transactions) . "</td>";
                     }
                 }
-                echo "<th>" . sumTransactions($transHeper->getExpensesByCategory($category['categoryID'], $year . '-01-01', $year . '-12-t')) . "</th>";
+                echo "<th>" . sumTransactions($transHeper->getExpensesByCategory($category['categoryID'], $year . '-01-01', $year . '-12-31')) . "</th>";
                 ?>
             </tr>
             <?php
@@ -76,7 +76,7 @@ if ($currentYear) {
             for ($i = 1; $i <= 12; $i++) {
                 echo "<th>" . sumTransactions($transHeper->getExpenses($year . '-' . $i . '-01', $year . '-' . $i . '-t')) . "</th>";
             }
-            echo "<th>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-12-t')) . "</th>";
+            echo "<th>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</th>";
             ?>
         </tr>
         </thead>
@@ -100,7 +100,7 @@ if ($currentYear) {
                         echo "<td onclick='window.open(\"viewDetail.php?client=" . $client['clientID'] . "&month=" . $i . "&year=" . $year . "\", \"View Transactions\", \"width=500,height=700\")'>" . sumTransactions($transactions) . "</td>";
                     }
                 }
-                echo "<th>" . sumTransactions($transHeper->getIncomeByClient($client['clientID'], $year . '-01-01', $year . '-12-t')) . "</th>";
+                echo "<th>" . sumTransactions($transHeper->getIncomeByClient($client['clientID'], $year . '-01-01', $year . '-12-31')) . "</th>";
                 ?>
             </tr>
             <?php
@@ -114,7 +114,7 @@ if ($currentYear) {
             for ($i = 1; $i <= 12; $i++) {
                 echo "<th>" . sumTransactions($transHeper->getIncome($year . '-' . $i . '-01', $year . '-' . $i . '-t')) . "</th>";
             }
-            echo "<th>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-t')) . "</th>";
+            echo "<th>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-31')) . "</th>";
             ?>
         </tr>
         </thead>
@@ -125,7 +125,7 @@ if ($currentYear) {
             for ($i = 1; $i <= 12; $i++) {
                 echo "<th>" . totalTransactions($transHeper->getIncome($year . '-' . $i . '-01', $year . '-' . $i . '-t'), $transHeper->getExpenses($year . '-' . $i . '-01', $year . '-' . $i . '-t')) . "</th>";
             }
-            echo "<th>" . totalTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-t'), $transHeper->getExpenses($year . '-01-01', $year . '-12-t')) . "</th>";
+            echo "<th>" . totalTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-31'), $transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</th>";
             ?>
         </tr>
         </thead>

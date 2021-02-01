@@ -82,7 +82,7 @@ ob_start();
         <div class="form-group">
             <label for="category">Category</label>
             <select class="form-control" id="category" name="category">
-                <option disabled>Select Category...</option>
+                <option disabled selected>Select Category...</option>
                 <?php
                 $categories = $catHelper->getCategories();
                 foreach ($categories as $category) {
@@ -96,7 +96,7 @@ ob_start();
         <div class="form-group">
             <label for="client">Client</label>
             <select class="form-control" id="client" name="client">
-                <option disabled>Select Client...</option>
+                <option disabled selected>Select Client...</option>
                 <?php
                 $clients = $clientHelper->getActiveClients();
                 foreach ($clients as $client) {

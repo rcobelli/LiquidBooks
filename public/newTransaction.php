@@ -28,6 +28,12 @@ ob_start();
 
 
 ?>
+    <script>
+        window.onunload = refreshParent;
+        function refreshParent() {
+            window.opener.location.reload();
+        }
+    </script>
 <h1>Create New Transaction</h1>
 <script>
     function transactionType() {
@@ -76,10 +82,11 @@ ob_start();
         <div class="form-group">
             <label for="category">Category</label>
             <select class="form-control" id="category" name="category">
+                <option disabled>Select Category...</option>
                 <?php
                 $categories = $catHelper->getCategories();
                 foreach ($categories as $category) {
-                    echo "<option value='" . $category['id'] . "'>" . $category['title'] . "</option>";
+                    echo "<option value='" . $category['categoryID'] . "'>" . $category['title'] . "</option>";
                 }
                 ?>
             </select>
@@ -89,6 +96,7 @@ ob_start();
         <div class="form-group">
             <label for="client">Client</label>
             <select class="form-control" id="client" name="client">
+                <option disabled>Select Client...</option>
                 <?php
                 $clients = $clientHelper->getActiveClients();
                 foreach ($clients as $client) {

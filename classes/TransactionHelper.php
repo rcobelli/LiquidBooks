@@ -57,6 +57,8 @@ class TransactionHelper extends Helper
 
     public function createTransaction($data)
     {
+        $data['date'] = date('Y-m-d', strtotime($data['date']));
+
         if ($data['type'] == "income") {
             if ($data['creditCardFee'] > 0) {
                 $clientHelper = new ClientHelper($this->config);
@@ -86,7 +88,7 @@ class TransactionHelper extends Helper
                     $transData = array(
                         'title' => $data['title'] . " <i>(Spread)</i>",
                         'amount' => $newAmount,
-                        'date' => date('Y-m-01', strtotime('+ ' . $i . ' month')),
+                        'date' => date('Y-m-01', strtotime($data['date'] . ' + ' . $i . ' month')),
                         'client' => $data['client'],
                         'type' => 'income'
                     );

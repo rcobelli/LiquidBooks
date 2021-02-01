@@ -37,7 +37,12 @@ if (isset($_GET['cat'])) {
 }
 
 ?>
-
+    <script>
+        window.onunload = refreshParent;
+        function refreshParent() {
+            window.opener.location.reload();
+        }
+    </script>
     <table class="table">
         <thead>
         <tr>

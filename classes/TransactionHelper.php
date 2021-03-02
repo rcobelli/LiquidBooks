@@ -3,27 +3,22 @@
 class TransactionHelper extends Helper
 {
 
-    public function getAllTransactions()
-    {
-        return $this->query("SELECT * FROM Categories");
-    }
-
     public function getExpenses($startDate, $endDate) {
-        return $this->query("SELECT * FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ?", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ? ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getExpensesByCategory($categoryID, $startDate, $endDate)
     {
-        return $this->query("SELECT * FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ?", $categoryID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ? ORDER BY date", $categoryID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getIncome($startDate, $endDate) {
-        return $this->query("SELECT * FROM Transactions WHERE clientID IS NOT NULL AND date >= ? AND date <= ?", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+        return $this->query("SELECT transactionID, title, amount, date, clientID, linkedTransactionID FROM Transactions WHERE clientID IS NOT NULL AND date >= ? AND date <= ? ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getIncomeByClient($clientID, $startDate, $endDate)
     {
-        return $this->query("SELECT * FROM Transactions WHERE clientID = ? AND date >= ? AND date <= ?", $clientID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+        return $this->query("SELECT transactionID, title, amount, date, clientID, linkedTransactionID FROM Transactions WHERE clientID = ? AND date >= ? AND date <= ? ORDER BY date", $clientID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function estimateExpensesByCategory($categoryID, $year, $month) {
@@ -60,12 +55,13 @@ class TransactionHelper extends Helper
         $data['date'] = date('Y-m-d', strtotime($data['date']));
 
         if ($data['type'] == "income") {
-            if ($data['creditCardFee'] > 0) {
-                $clientHelper = new ClientHelper($this->config);
-                $clientName = $clientHelper->getClientByID($data['client'])['title'];
+            $clientHelper = new ClientHelper($this->config);
+            $clientName = $clientHelper->getClientByID($data['client'])['title'];
+            $data['title'] = $clientName . ' - ' . $data['title'];
 
+            if ($data['creditCardFee'] > 0) {
                 $creditCardData = array(
-                    'title' => $clientName . ' - ' . $data['title'] . " bank fee",
+                    'title' => $data['title'] . " bank fee",
                     'amount' => $data['creditCardFee'],
                     'date' => $data['date'],
                     'category' => 0,

@@ -30,11 +30,18 @@ ob_start();
 ?>
     <h1>View Transactions</h1>
 <?php
-if (isset($_GET['cat'])) {
-    echo "<h3>" . $_GET['month'] . "/" . $_GET['year'] . " - " . $catHelper->getCategoryById($_GET['cat'])['title'] . "</h3>";
+
+if (isset($_GET['month'])) {
+    echo "<h3>" . $_GET['month'] . "/" . $_GET['year'];
 } else {
-    echo "<h3>" . $_GET['month'] . "/" . $_GET['year'] . " - " . $clientHelper->getClientByID($_GET['client'])['title'] . "</h3>";
+    echo "<h3>" . $_GET['year'];
 }
+if (isset($_GET['cat'])) {
+    echo " - " . $catHelper->getCategoryById($_GET['cat'])['title'];
+} else if (isset($_GET['client'])) {
+    echo " - " . $clientHelper->getClientByID($_GET['client'])['title'];
+}
+echo "</h3>"
 
 ?>
     <table class="table">
@@ -47,10 +54,27 @@ if (isset($_GET['cat'])) {
         </thead>
         <tbody>
         <?php
-        if (isset($_GET['cat'])) {
-            $records = $transHelper->getExpensesByCategory($_GET['cat'], $_GET['year'] . '-' . $_GET['month'] . '-01', $_GET['year'] . '-' . $_GET['month'] . '-t');
+        if (isset($_GET['month'])) {
+            $startDate = $_GET['year'] . '-' . $_GET['month'] . '-01';
+            $endDate = $_GET['year'] . '-' . $_GET['month'] . '-t';
         } else {
-            $records = $transHelper->getIncomeByClient($_GET['client'], $_GET['year'] . '-' . $_GET['month'] . '-01', $_GET['year'] . '-' . $_GET['month'] . '-t');
+            $startDate = $_GET['year'] . '-01-01';
+            $endDate = $_GET['year'] . '-12-t';
+        }
+
+        if (isset($_GET['cat'])) {
+            $records = $transHelper->getExpensesByCategory($_GET['cat'], $startDate, $endDate);
+        } else if (isset($_GET['client'])) {
+            $records = $transHelper->getIncomeByClient($_GET['client'], $startDate, $endDate);
+        } else if ($_GET['type'] == "expenses") {
+            $records = $transHelper->getExpenses($startDate, $endDate);
+        } else if ($_GET['type'] == "income") {
+            $records = $transHelper->getIncome($startDate, $endDate);
+        } else if ($_GET['type'] == "both") {
+            $records = array_merge($transHelper->getIncome($startDate, $endDate), $transHelper->getExpenses($startDate, $endDate));
+            $dates = array_column($records, 'date');
+            array_multisort($dates, SORT_ASC, $records);
+
         }
 
         foreach ($records as $record) {
@@ -58,7 +82,15 @@ if (isset($_GET['cat'])) {
             <tr>
                 <td><?php echo date('m/d/Y', strtotime($record['date']));?></td>
                 <td><?php echo $record['title'];?></td>
-                <td>$<?php echo number_format($record['amount'], 2);?></td>
+                <td>
+                    <?php
+                    if ($_GET['type'] == 'both' && !is_null($record['categoryID'])) {
+                        echo "($" . number_format($record['amount'], 2) . ")";
+                    } else {
+                        echo "$" . number_format($record['amount'], 2);
+                    }
+                    ?>
+                </td>
             </tr>
             <?php
         }

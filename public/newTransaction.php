@@ -58,7 +58,7 @@ ob_start();
     </div>
     <div class="form-group">
         <label for="amount">Amount</label>
-        <input type="number" class="form-control" id="amount" name="amount" placeholder="0.00" required step="0.01">
+        <input type="number" class="form-control" id="amount" name="amount" placeholder="0.00" required step="0.01" autocomplete="off">
     </div>
     <div class="form-group">
         <label for="spread">Spread Over</label>
@@ -67,6 +67,10 @@ ob_start();
             <option value="3">Quarter</option>
             <option value="12">Year</option>
         </select>
+    </div>
+    <div class="custom-control custom-switch mb-2">
+        <input type="checkbox" class="custom-control-input" id="customSwitch1" name="backdate">
+        <label class="custom-control-label" for="customSwitch1">Back Date Spread</label>
     </div>
     <div class="mb-2">
         <div class="custom-control custom-radio custom-control-inline">

@@ -28,11 +28,11 @@ ob_start();
 
 if ($_REQUEST['action'] != 'create') {
     ?>
-    <button class="btn btn-success float-right" onclick="window.location = '?action=create'">New Client</button>
+    <button class="btn btn-success float-right" onclick="window.location = '?action=create'">New Category</button>
     <?php
 }
 ?>
-<h1>Manage Clients</h1>
+<h1>Manage Categories</h1>
 
 <?php
 

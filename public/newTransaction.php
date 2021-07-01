@@ -74,7 +74,7 @@ ob_start();
     </div>
     <div class="mb-2">
         <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="expense" name="type" class="custom-control-input" onchange="transactionType()" value="expense">
+            <input type="radio" id="expense" name="type" class="custom-control-input" onchange="transactionType()" value="expense" required>
             <label class="custom-control-label" for="expense">Expense</label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">

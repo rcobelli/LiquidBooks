@@ -14,6 +14,9 @@
                     <a class="nav-link" href="../public/index.php">Dashboard</a>
                 </li>
                 <li class="nav-item ">
+                    <a class="nav-link" href="../public/trend.php">Trends</a>
+                </li>
+                <li class="nav-item ">
                     <a class="nav-link" href="../public/clients.php">Manage Clients</a>
                 </li>
                 <li class="nav-item ">

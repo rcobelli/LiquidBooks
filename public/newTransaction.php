@@ -72,6 +72,10 @@ ob_start();
         <input type="checkbox" class="custom-control-input" id="customSwitch1" name="backdate">
         <label class="custom-control-label" for="customSwitch1">Back Date Spread</label>
     </div>
+    <div class="custom-control custom-switch mb-2">
+        <input type="checkbox" class="custom-control-input" id="customSwitch2" name="irrelevant">
+        <label class="custom-control-label" for="customSwitch2">Irrelevant</label>
+    </div>
     <div class="mb-2">
         <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" id="expense" name="type" class="custom-control-input" onchange="transactionType()" value="expense" required>

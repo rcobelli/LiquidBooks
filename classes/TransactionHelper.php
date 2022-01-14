@@ -4,12 +4,16 @@ class TransactionHelper extends Helper
 {
 
     public function getExpenses($startDate, $endDate) {
-        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ? ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID, irrelevant FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ? ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+    }
+
+    public function getRelevantExpenses($startDate, $endDate) {
+        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ? AND irrelevant = 0 ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getExpensesByCategory($categoryID, $startDate, $endDate)
     {
-        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ? ORDER BY date", $categoryID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID, irrelevant FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ? ORDER BY date", $categoryID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getIncome($startDate, $endDate) {
@@ -55,6 +59,12 @@ class TransactionHelper extends Helper
         $data['date'] = date('Y-m-d', strtotime($data['date']));
         $data['time'] = strtotime($data['date']);
 
+        if ($data['irrelevant'] == 'on') {
+            $data['irrelevant'] = 1;
+        } else if (is_null($data['irrelevant'])) {
+            $data['irrelevant'] = 0;
+        }
+
         if ($data['type'] == "income") {
             return $this->processIncome($data);
         } else {
@@ -72,7 +82,8 @@ class TransactionHelper extends Helper
                 'amount' => $data['creditCardFee'],
                 'date' => $data['date'],
                 'category' => 0,
-                'type' => 'expense'
+                'type' => 'expense',
+                'irrelevant' => $data['irrelevant']
             );
             if ($this->createTransaction($creditCardData)) {
                 $creditCardTransId = $this->getLastInsertID();
@@ -86,6 +97,7 @@ class TransactionHelper extends Helper
         if ($data['spread'] > 1) {
             $spreadDates = $this->generateSpreadDates($data);
             $newAmount = $data['amount'] / $data['spread'];
+            $spreadID = time();
 
             foreach ($spreadDates as $newDate) {
                 $transData = array(
@@ -93,7 +105,10 @@ class TransactionHelper extends Helper
                     'amount' => $newAmount,
                     'date' => date('Y-m-d', $newDate),
                     'client' => $data['client'],
-                    'type' => 'income'
+                    'type' => 'income',
+                    'linkedTransactionID' => $creditCardTransId,
+                    'irrelevant' => $data['irrelevant'],
+                    'spreadID' => $spreadID
                 );
                 if (!$this->createTransaction($transData)) {
                     return false;
@@ -103,13 +118,14 @@ class TransactionHelper extends Helper
             return true;
         }
 
-        return $this->query("INSERT INTO Transactions (title, amount, date, clientID, linkedTransactionID) VALUES (?, ?, ?, ?, ?)", $data['title'], $data['amount'], $data['date'], $data['client'], $creditCardTransId);
+        return $this->query("INSERT INTO Transactions (title, amount, date, clientID, linkedTransactionID, irrelevant, spreadID) VALUES (?, ?, ?, ?, ?, ?, ?)", $data['title'], $data['amount'], $data['date'], $data['client'], $data['linkedTransactionID'], $data['irrelevant'], $data['spreadID']);
     }
 
     private function processExpense($data) {
         if ($data['spread'] > 1) {
             $spreadDates = $this->generateSpreadDates($data);
             $newAmount = $data['amount'] / $data['spread'];
+            $spreadID = time();
 
             foreach ($spreadDates as $newDate) {
                 $transData = array(
@@ -117,7 +133,9 @@ class TransactionHelper extends Helper
                     'amount' => $newAmount,
                     'date' => date('Y-m-d', $newDate),
                     'category' => $data['category'],
-                    'type' => 'expense'
+                    'type' => 'expense',
+                    'irrelevant' => $data['irrelevant'],
+                    'spreadID' => $spreadID
                 );
                 if (!$this->createTransaction($transData)) {
                     return false;
@@ -127,7 +145,7 @@ class TransactionHelper extends Helper
             return true;
         }
 
-        return $this->query("INSERT INTO Transactions (title, amount, date, categoryID) VALUES (?, ?, ?, ?)", $data['title'], $data['amount'], $data['date'], $data['category']);
+        return $this->query("INSERT INTO Transactions (title, amount, date, categoryID, irrelevant, spreadID) VALUES (?, ?, ?, ?, ?, ?)", $data['title'], $data['amount'], $data['date'], $data['category'], $data['irrelevant'], $data['spreadID']);
     }
 
     private function generateSpreadDates($data) {
@@ -198,5 +216,25 @@ class TransactionHelper extends Helper
             $components = explode("-", $input);
             return date($input, strtotime($components[0] . '-'. $components[1] . '-01'));
         }
+    }
+
+    public function deleteTransaction($id) {
+        $result = $this->query("SELECT linkedTransactionID, spreadID FROM Transactions  WHERE transactionID = ? LIMIT 1", $id);
+        $linkedTransactionID = null;
+        if (!is_null($result['linkedTransactionID'])) {
+            $linkedTransactionID = $result['linkedTransactionID'];
+        }
+
+        if (!$this->query("DELETE FROM Transactions WHERE transactionID = ?", $id)) {
+            return false;
+        }
+
+        if (!is_null($result['spreadID'])) {
+            $this->query("DELETE FROM Transactions WHERE spreadID = ?", $result['spreadID']);
+        }
+
+        $this->query("DELETE FROM Transactions WHERE transactionID = ?", $linkedTransactionID);
+
+        return true;
     }
 }

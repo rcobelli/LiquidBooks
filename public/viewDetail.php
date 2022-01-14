@@ -12,6 +12,12 @@ if (!empty($_POST)) {
     } else {
         $errors[] = $transHelper->getErrorMessage();
     }
+} else if ($_GET['action'] == 'delete' && !empty($_GET['item'])) {
+    if ($transHelper->deleteTransaction($_GET['item'])) {
+        echo "<script>window.close();</script>";
+    } else {
+        $errors[] = $transHelper->getErrorMessage();
+    }
 }
 
 // Site/page boilerplate
@@ -50,6 +56,7 @@ echo "</h3>"
             <th style="width: 10%">Date</th>
             <th>Title</th>
             <th style="width: 10%">Amount</th>
+            <th style="width: 10%">&nbsp;</th>
         </tr>
         </thead>
         <tbody>
@@ -78,8 +85,12 @@ echo "</h3>"
         }
 
         foreach ($records as $record) {
+            if (!is_null($record['irrelevant']) && $record['irrelevant'] == 1) {
+                echo "<tr style='color: red'>";
+            } else {
+                echo '<tr>';
+            }
             ?>
-            <tr>
                 <td><?php echo date('m/d/Y', strtotime($record['date']));?></td>
                 <td><?php echo $record['title'];?></td>
                 <td>
@@ -91,8 +102,9 @@ echo "</h3>"
                     }
                     ?>
                 </td>
-            </tr>
+                <td><a href="?action=delete&item=<?php echo $record['transactionID']; ?>"><img src="resources/trash.png" height="20px" alt="Delete Transaction"/></a></td>
             <?php
+            echo "</tr>";
         }
         ?>
         </tbody>

@@ -8,7 +8,7 @@ if ($_COOKIE['debug'] == 'true') {
     error_reporting(0);
 }
 
-if ($_COOKIE['centerdesk'] != "loggedIn") {
+if ($_SERVER['SERVER_NAME'] == "dev.rybel-llc.com" && $_COOKIE['centerdesk'] != "loggedIn") {
     die();
 }
 

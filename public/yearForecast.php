@@ -49,7 +49,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
         foreach ($categories as $category) {
             ?>
             <tr>
-                <th><?php echo $category['title']; ?></th>
+                <th title="Estimates: ThisMonthLastYearTotal + ((SoFarThisYearTotal - SoFarLastYearTotal)/(2 * 12))"><?php echo $category['title']; ?></th>
                 <?php
                 $total = 0.0;
                 for ($i = 1; $i <= 12; $i++) {
@@ -58,7 +58,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
                         $estimate = $transHeper->estimateExpensesByCategory($category['categoryID'], $year, $i);
                         $total += $estimate;
 
-                        echo "<td><span style='color: red'>$" . $estimate . "</span></td>";
+                        echo "<td><span style='color: red' title='" . $transHeper->debugEstimateExpensesByCategory($category['categoryID'], $year, $i) . "'>$" . number_format($estimate) . "</span></td>";
                     } else {
                         $value = sumTransactions($transactions);
                         $total += preg_replace('/[^0-9,.]+/', '', $value);
@@ -86,8 +86,9 @@ for ($i = 2017; $i <= date('Y'); $i++) {
         </thead>
         <tbody>
         <?php
-        $clients = $clientHelper->getClientsWithIncome($year - 1);
+        $clients = $clientHelper->getClientsWithIncome($year - 1) + $clientHelper->getClientsWithIncome($year);
         $incomeTotal = 0.0;
+        unset($clients[array_search('Other', array_column($clients, 'title'))]); // Remove a duplicate of Other
         foreach ($clients as $client) {
             ?>
             <tr>
@@ -100,7 +101,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
                         $estimate = $transHeper->estimateIncomeByClient($client['clientID'], $year, $i);
                         $total += $estimate;
 
-                        echo "<td><span style='color: red'>$" . $estimate . "</span></td>";
+                        echo "<td><span style='color: red' title='Average of income over rolling last year'>$" . number_format($estimate) . "</span></td>";
                     } else {
                         $value = sumTransactions($transactions);
                         $total += preg_replace('/[^0-9,.]+/', '', $value);
@@ -147,7 +148,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
                 echo "<th><a href='yearOverview.php?year=" . explode(" ", $year)[0] . "'>" . $year . "</a></th>";
             }
             ?>
-            <th><?php echo date('Y'); ?> Forecast</th>
+            <th style="color: red"><?php echo date('Y'); ?> Forecast</th>
         </tr>
         </thead>
         <tbody>
@@ -158,7 +159,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
                 echo "<td>" . sumTransactions($transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</td>";
             }
             ?>
-            <td>$<?php echo number_format($expensesTotal, 2); ?></td>
+            <td style="color: red">$<?php echo number_format($expensesTotal, 2); ?></td>
         </tr>
 
         <tr>
@@ -168,7 +169,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
                 echo "<td>" . sumTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-31')) . "</td>";
             }
             ?>
-            <td>$<?php echo number_format($incomeTotal, 2); ?></td>
+            <td style="color: red">$<?php echo number_format($incomeTotal, 2); ?></td>
         </tr>
         <tr>
             <th>Total Profit</th>
@@ -177,7 +178,7 @@ for ($i = 2017; $i <= date('Y'); $i++) {
                 echo "<td>" . totalTransactions($transHeper->getIncome($year . '-01-01', $year . '-12-31'), $transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</td>";
             }
             ?>
-            <td>$<?php echo number_format($incomeTotal - $expensesTotal, 2); ?></td>
+            <td style="color: red">$<?php echo number_format($incomeTotal - $expensesTotal, 2); ?></td>
         </tr>
         <tr>
             <th>Total Margin</th>
@@ -186,9 +187,9 @@ for ($i = 2017; $i <= date('Y'); $i++) {
                 echo "<td>" . calculateMargin($transHeper->getIncome($year . '-01-01', $year . '-12-31'), $transHeper->getExpenses($year . '-01-01', $year . '-12-31')) . "</td>";
             }
             ?>
-            <td><?php echo number_format((1 - ($expensesTotal / $incomeTotal)) * 100, 2) ?>%</td>
+            <td style="color: red"><?php echo number_format((1 - ($expensesTotal / $incomeTotal)) * 100, 2) ?>%</td>
         </tr>
-        </thead>
+        </tbody>
     </table>
 
 <?php

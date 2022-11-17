@@ -13,18 +13,23 @@ $site->setPage($page);
 
 // Start rendering the content
 ob_start();
+$year = date('Y');
 
 $data = array();
-for ($i = 2017; $i <= date('Y'); $i++) {
+for ($i = $year - 1; $i >= 2017; $i--) {
     $data[$i] = "";
 }
 
+
 ?>
-    <table class="table table-hover">
+    <div class="text-center">
+        <a class='btn btn-outline-dark btn-lg' href='yearOverview.php?year=" . explode(" ", $year)[0] . "'>Current Year Summary</a>
+        <a class='btn btn-outline-dark btn-lg ' href='yearForecast.php?year=" . explode(" ", $year)[0] . "'>Current Year Forecast</a>
+    </div>
+    <table class="table table-hover mt-5">
         <thead>
         <tr>
-            <th>View Summary</th>
-            <th>View Forecast</th>
+            <th>View Prior Year Summaries</th>
         </tr>
         </thead>
         <tbody>
@@ -32,11 +37,6 @@ for ($i = 2017; $i <= date('Y'); $i++) {
         foreach ($data as $year => $datum) {
             echo "<tr>";
             echo "<td><a class='btn btn-info' href='yearOverview.php?year=" . explode(" ", $year)[0] . "'>" . $year . "</a></td>";
-            if ($year == date('Y')) {
-                echo "<td><a class='btn btn-info' href='yearForecast.php?year=" . explode(" ", $year)[0] . "'>" . $year . "</a></td>";
-            } else {
-                echo "<td>&nbsp;</td>";
-            }
             echo "</tr>";
         }
         ?>

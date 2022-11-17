@@ -26,18 +26,57 @@ class TransactionHelper extends Helper
     }
 
     public function estimateExpensesByCategory($categoryID, $year, $month) {
-        $transactions = $this->getExpensesByCategory($categoryID, $year - 1 . '-' . $month . '-01', $year - 1 . '-12-t');
+        $transactions = $this->getExpensesByCategory($categoryID, $year - 1 . '-' . $month . '-01', $year - 1 . '-' . $month . '-t');
 
-        $total = 0.0;
+        $thisMonthLastYearTotal = 0.0;
         foreach ($transactions as $datum) {
-            $total += $datum['amount'];
+            $thisMonthLastYearTotal += $datum['amount'];
         }
 
-        return number_format($total / (12-$month+1), 0);
+        $transactions = $this->getExpensesByCategory($categoryID, $year . '-01-01', $year . '-' . ($month == 1 ? 1 : $month - 1) . '-t');
+
+        $soFarThisYearTotal = 0.0;
+        foreach ($transactions as $datum) {
+            $soFarThisYearTotal += $datum['amount'];
+        }
+
+        $transactions = $this->getExpensesByCategory($categoryID, $year - 1 . '-01-01', $year - 1 . '-' . ($month == 1 ? 1 : $month - 1) . '-t');
+
+        $soFarLastYearTotal = 0.0;
+        foreach ($transactions as $datum) {
+            $soFarLastYearTotal += $datum['amount'];
+        }
+
+        return $thisMonthLastYearTotal + (($soFarThisYearTotal - $soFarLastYearTotal) / 24);
+    }
+
+    public function debugEstimateExpensesByCategory($categoryID, $year, $month) {
+        $transactions = $this->getExpensesByCategory($categoryID, $year - 1 . '-' . $month . '-01', $year - 1 . '-' . $month . '-t');
+
+        $thisMonthLastYearTotal = 0.0;
+        foreach ($transactions as $datum) {
+            $thisMonthLastYearTotal += $datum['amount'];
+        }
+
+        $transactions = $this->getExpensesByCategory($categoryID, $year . '-01-01', $year . '-' . ($month == 1 ? 1 : $month - 1) . '-t');
+
+        $soFarThisYearTotal = 0.0;
+        foreach ($transactions as $datum) {
+            $soFarThisYearTotal += $datum['amount'];
+        }
+
+        $transactions = $this->getExpensesByCategory($categoryID, $year - 1 . '-01-01', $year - 1 . '-' . ($month == 1 ? 1 : $month - 1) . '-t');
+
+        $soFarLastYearTotal = 0.0;
+        foreach ($transactions as $datum) {
+            $soFarLastYearTotal += $datum['amount'];
+        }
+
+        return $thisMonthLastYearTotal . " + ((" . $soFarThisYearTotal . " - " . $soFarLastYearTotal . ")/(2 * 12))";
     }
 
     public function estimateIncomeByClient($clientID, $year, $month) {
-        $transactions = $this->getIncomeByClient($clientID, $year . '-01-01', $year . '-12-t');
+        $transactions = $this->getIncomeByClient($clientID, $year - 1 . '-' . $month . '-01', $year - 1 . '-' . $month . '-t');
 
         $total = 0.0;
         $count = 0;
@@ -51,7 +90,7 @@ class TransactionHelper extends Helper
         }
 
 
-        return number_format($total / $count, 0);
+        return $total / $count;
     }
 
     public function createTransaction($data)

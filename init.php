@@ -8,6 +8,10 @@ if ($_COOKIE['debug'] == 'true') {
     error_reporting(0);
 }
 
+if ($_COOKIE['centerdesk'] != "loggedIn") {
+    die();
+}
+
 include_once("stdlib.php");
 
 spl_autoload_register(function ($class_name) {

@@ -14,7 +14,13 @@ if (!empty($_POST)) {
     }
 } else if ($_GET['action'] == 'delete' && !empty($_GET['item'])) {
     if ($transHelper->deleteTransaction($_GET['item'])) {
-        echo "<script>window.close();</script>";
+        echo "<script>
+            window.onunload = refreshParent;
+            function refreshParent() {
+                window.opener.location.reload();
+            }
+            window.close();
+        </script>";
     } else {
         $errors[] = $transHelper->getErrorMessage();
     }

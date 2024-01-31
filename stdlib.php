@@ -15,17 +15,6 @@ $months = array(
     "Dec"
 );
 
-function init_site(site $site)
-{
-    $site->addHeader("../includes/header.php");
-    $site->addFooter("../includes/footer.php");
-}
-
-function logMessage($message)
-{
-    // echo $message;
-}
-
 function sumTransactions($data) {
     $total = 0.0;
     foreach ($data as $datum) {

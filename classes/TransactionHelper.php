@@ -1,5 +1,7 @@
 <?php
 
+use Rybel\backbone\Helper;
+
 class TransactionHelper extends Helper
 {
 

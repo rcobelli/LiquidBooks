@@ -2,40 +2,46 @@
 
 include '../init.php';
 
+$samlHelper->processSamlInput();
+
+if (!$samlHelper->isLoggedIn()) {
+    header("Location: index.php");
+    die();
+}
+
+$config['type'] = Rybel\backbone\LogStream::console;
+
 $helper = new ClientHelper($config);
+
+// Boilerplate
+$page = new Rybel\backbone\page();
+$page->addHeader("../includes/header.php");
+$page->addFooter("../includes/footer.php");
+$page->addHeader("../includes/navbar.php");
 
 // Application logic
 if ($_REQUEST['action'] == 'archive') {
     if ($helper->archiveClient($_REQUEST['item'])) {
-        $success = true;
+        $page->setSuccess(true);
         unset($_REQUEST);
     } else {
-        $errors[] = $helper->getErrorMessage();
+        $page->addError($helper->getErrorMessage());
     }
 } elseif ($_REQUEST['submit'] == 'create') {
     if ($helper->createClient($_POST['title'])) {
-        $success = true;
+        $page->setSuccess(true);
         unset($_REQUEST);
     } else {
-        $errors[] = $helper->getErrorMessage();
+        $page->addError($helper->getErrorMessage());
     }
 } elseif ($_REQUEST['submit'] == 'update') {
     if ($helper->updateClient($_POST['item'], $_POST['title'])) {
-        $success = true;
+        $page->setSuccess(true);
         unset($_REQUEST);
     } else {
-        $errors[] = $helper->getErrorMessage();
+        $page->addError($helper->getErrorMessage());
     }
 }
-
-// Site/page boilerplate
-$site = new site('Liquid Books', $errors, $success);
-$site->addHeader("../includes/navbar.php");
-init_site($site);
-
-$page = new page();
-$site->setPage($page);
-
 
 // Start rendering the content
 ob_start();
@@ -61,7 +67,4 @@ if ($_REQUEST['action'] == 'create') {
 
 // End rendering the content
 $content = ob_get_clean();
-$page->setContent($content);
-
-$site->render();
-?>
+$page->render($content);

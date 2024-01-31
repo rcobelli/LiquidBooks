@@ -2,17 +2,24 @@
 
 include '../init.php';
 
+$samlHelper->processSamlInput();
+
+if (!$samlHelper->isLoggedIn()) {
+    header("Location: index.php");
+    die();
+}
+
+$config['type'] = Rybel\backbone\LogStream::console;
+
 $catHelper = new CategoryHelper($config);
 $clientHelper = new ClientHelper($config);
 $transHeper = new TransactionHelper($config);
 
-// Site/page boilerplate
-$site = new site('Liquid Books', $errors);
-$site->addHeader("../includes/navbar.php");
-init_site($site);
-
-$page = new page();
-$site->setPage($page);
+// Boilerplate
+$page = new Rybel\backbone\page();
+$page->addHeader("../includes/header.php");
+$page->addFooter("../includes/footer.php");
+$page->addHeader("../includes/navbar.php");
 
 $year = date('Y');
 
@@ -194,6 +201,4 @@ for ($i = 2017; $i <= date('Y'); $i++) {
 
 <?php
 $content = ob_get_clean();
-$page->setContent($content);
-
-$site->render();
+$page->render($content);

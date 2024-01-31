@@ -2,6 +2,20 @@
 
 include '../init.php';
 
+$samlHelper->processSamlInput();
+
+if (!$samlHelper->isLoggedIn()) {
+    header("Location: index.php");
+    die();
+}
+
+$config['type'] = Rybel\backbone\LogStream::console;
+
+// Boilerplate
+$page = new Rybel\backbone\page();
+$page->addHeader("../includes/header.php");
+$page->addFooter("../includes/footer.php");
+
 $catHelper = new CategoryHelper($config);
 $clientHelper = new ClientHelper($config);
 $transHelper = new TransactionHelper($config);
@@ -26,19 +40,8 @@ if (!empty($_POST)) {
     }
 }
 
-// Site/page boilerplate
-$site = new site('Liquid Books', $errors);
-init_site($site);
-
-$page = new page();
-$site->setPage($page);
-
-
 // Start rendering the content
 ob_start();
-
-
-
 ?>
     <h1>View Transactions</h1>
 <?php
@@ -118,6 +121,4 @@ echo "</h3>"
 
 <?php
 $content = ob_get_clean();
-$page->setContent($content);
-
-$site->render();
+$page->render($content);

@@ -3,3 +3,8 @@ os: linux
 files:
   - source: /
     destination: /var/www/liquidbooks
+hooks:
+  AfterInstall:
+    - location: appspec.sh
+      timeout: 300
+      runas: root

@@ -1,5 +1,6 @@
 <?php
 
+// Support DEBUG cookie
 if ($_COOKIE['debug'] == 'true') {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -8,10 +9,7 @@ if ($_COOKIE['debug'] == 'true') {
     error_reporting(0);
 }
 
-if ($_SERVER['SERVER_NAME'] == "dev.rybel-llc.com" && $_COOKIE['centerdesk'] != "loggedIn") {
-    die();
-}
-
+require_once("vendor/autoload.php");
 include_once("stdlib.php");
 
 spl_autoload_register(function ($class_name) {
@@ -22,6 +20,8 @@ spl_autoload_register(function ($class_name) {
 });
 
 $ini = parse_ini_file("config.ini", true)["lb"];
+
+date_default_timezone_set('America/New_York');
 
 try {
     $pdo = new PDO(
@@ -38,15 +38,17 @@ try {
 }
 
 $config = array(
-    'dbo' => $pdo
+    'dbo' => $pdo,
+    'appName' => 'Liquid Books'
 );
 
-$errors = array();
+// Setup SAML
+$baseUrl = "https://dev.rybel-llc.com:450/";
+$keycloakUrl = "https://dev.rybel-llc.com:8443/realms/Rybel";
 
-// Start session if not already created
-if (session_status() == PHP_SESSION_NONE) {
-    session_name("lb");
-    session_start();
-}
-
-date_default_timezone_set('America/New_York');
+$samlHelper = new Rybel\backbone\SamlAuthHelper($baseUrl, 
+                            $keycloakUrl, 
+                            file_get_contents("../certs/idp.cert"), 
+                            file_get_contents('../certs/public.crt'), 
+                            file_get_contents('../certs/private.pem'),
+                            $_COOKIE['debug'] == 'true');

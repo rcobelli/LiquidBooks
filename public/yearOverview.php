@@ -2,8 +2,6 @@
 
 include '../init.php';
 
-$samlHelper->processSamlInput();
-
 if (!$samlHelper->isLoggedIn()) {
     header("Location: index.php");
     die();

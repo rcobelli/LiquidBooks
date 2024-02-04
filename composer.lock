@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.298.0",
+            "version": "3.298.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "55536f81006d8721c51e342d638e7ccc3529e754"
+                "reference": "626f731c38e06ea483025334512f4c2afea1739d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/55536f81006d8721c51e342d638e7ccc3529e754",
-                "reference": "55536f81006d8721c51e342d638e7ccc3529e754",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/626f731c38e06ea483025334512f4c2afea1739d",
+                "reference": "626f731c38e06ea483025334512f4c2afea1739d",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.298.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.298.2"
             },
-            "time": "2024-01-31T19:06:05+00:00"
+            "time": "2024-02-02T19:05:34+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1058,16 +1058,16 @@
         },
         {
             "name": "rybel-llc/backbone",
-            "version": "1.2.3",
+            "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Rybel-LLC/Backbone.git",
-                "reference": "1f622f99d8ea3e7a10085b7695a81f241752f712"
+                "reference": "a0bf6f95b7ad2ebcd79672d9eb87af176efe77f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Rybel-LLC/Backbone/zipball/1f622f99d8ea3e7a10085b7695a81f241752f712",
-                "reference": "1f622f99d8ea3e7a10085b7695a81f241752f712",
+                "url": "https://api.github.com/repos/Rybel-LLC/Backbone/zipball/a0bf6f95b7ad2ebcd79672d9eb87af176efe77f8",
+                "reference": "a0bf6f95b7ad2ebcd79672d9eb87af176efe77f8",
                 "shasum": ""
             },
             "require": {
@@ -1091,10 +1091,10 @@
             ],
             "description": "Core classes from Rybel projects",
             "support": {
-                "source": "https://github.com/Rybel-LLC/Backbone/tree/1.2.3",
+                "source": "https://github.com/Rybel-LLC/Backbone/tree/1.2.4",
                 "issues": "https://github.com/Rybel-LLC/Backbone/issues"
             },
-            "time": "2024-01-31T02:15:30+00:00"
+            "time": "2024-02-04T19:20:30+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

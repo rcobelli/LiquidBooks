@@ -1,0 +1,23 @@
+services:
+  liquidbooks-db:
+    image: mysql:latest
+    volumes:
+      - liquidbooks_db_data:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=liquid_books
+  liquidbooks-web:
+    restart: unless-stopped
+    build:
+      context: app
+      dockerfile: Dockerfile
+    ports: 
+      - '8001:80'
+    volumes:
+      - ./app:/var/www/html/
+
+
+volumes:
+  liquidbooks_db_data:

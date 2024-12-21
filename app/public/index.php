@@ -2,13 +2,6 @@
 
 include '../init.php';
 
-$samlHelper->processSamlInput();
-
-if (!$samlHelper->isLoggedIn()) {
-    header("Location: ?sso");
-    die();
-}
-
 $config['type'] = Rybel\backbone\LogStream::console;
 
 $transHeper = new TransactionHelper($config);

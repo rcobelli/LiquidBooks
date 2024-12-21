@@ -1,5 +1,1 @@
-config.ini
-.idea/*
-
-vendor/*
-certs/*
+app/vendor/*

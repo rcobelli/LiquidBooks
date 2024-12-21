@@ -2,11 +2,6 @@
 
 include '../init.php';
 
-if (!$samlHelper->isLoggedIn()) {
-    header("Location: index.php");
-    die();
-}
-
 $config['type'] = Rybel\backbone\LogStream::console;
 
 $catHelper = new CategoryHelper($config);

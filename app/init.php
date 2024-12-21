@@ -19,7 +19,7 @@ date_default_timezone_set('America/New_York');
 
 try {
     $pdo = new PDO(
-        'mysql:host=liquidbooks_liquidbooks-db_1;dbname=liquid_books;charset=utf8mb4',
+        'mysql:host=liquidbooks-db;dbname=liquid_books;charset=utf8mb4',
         'root',
         'root',
         array(

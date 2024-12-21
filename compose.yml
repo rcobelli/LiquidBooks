@@ -1,5 +1,6 @@
 services:
   liquidbooks-db:
+    container_name: liquidbooks-db
     image: mysql:latest
     volumes:
       - liquidbooks_db_data:/var/lib/mysql
@@ -8,7 +9,13 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=liquid_books
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 3
+      start_period: 10s
   liquidbooks-web:
+    container_name: liquidbooks-web
     restart: unless-stopped
     build:
       context: app
@@ -17,6 +24,11 @@ services:
       - '8001:80'
     volumes:
       - ./app:/var/www/html/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
 
 volumes:

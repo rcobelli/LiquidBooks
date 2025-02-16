@@ -9,6 +9,10 @@ class TransactionHelper extends Helper
         return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID, irrelevant FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ? ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
+    public function getUnspreadExpenses($startDate, $endDate) {
+        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID, irrelevant, spreadID FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ? AND spreadID is NULL UNION SELECT transactionID, SUBSTRING_INDEX(title, '<', 1) AS title, SUM(amount), date, categoryID, linkedTransactionID, irrelevant, spreadID FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ? AND spreadID is not NULL GROUP BY spreadID ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate), $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+    }
+
     public function getRelevantExpenses($startDate, $endDate) {
         return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID FROM Transactions WHERE categoryID IS NOT NULL AND date >= ? AND date <= ? AND irrelevant = 0 ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
@@ -18,13 +22,27 @@ class TransactionHelper extends Helper
         return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID, irrelevant FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ? ORDER BY date", $categoryID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
+    public function getUnspreadExpensesByCategory($categoryID, $startDate, $endDate)
+    {
+        return $this->query("SELECT transactionID, title, amount, date, categoryID, linkedTransactionID, irrelevant, spreadID FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ? AND spreadID is NULL UNION SELECT transactionID, SUBSTRING_INDEX(title, '<', 1) AS title, SUM(amount), date, categoryID, linkedTransactionID, irrelevant, spreadID FROM Transactions WHERE categoryID = ? AND date >= ? AND date <= ? AND spreadID is not NULL GROUP BY spreadID ORDER BY date", $categoryID, $this->normalizeDate($startDate), $this->normalizeDate($endDate), $categoryID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+    }
+
     public function getIncome($startDate, $endDate) {
         return $this->query("SELECT transactionID, title, amount, date, clientID, linkedTransactionID FROM Transactions WHERE clientID IS NOT NULL AND date >= ? AND date <= ? ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+    }
+
+    public function getUnspreadIncome($startDate, $endDate) {
+        return $this->query("SELECT transactionID, title, amount, date, clientID, linkedTransactionID, spreadID FROM Transactions WHERE clientID IS NOT NULL AND date >= ? AND date <= ? AND spreadID is NULL UNION SELECT transactionID, SUBSTRING_INDEX(title, '<', 1) AS title, SUM(amount), date, clientID, linkedTransactionID, spreadID FROM Transactions WHERE clientID IS NOT NULL AND date >= ? AND date <= ? AND spreadID is not NULL GROUP BY spreadID ORDER BY date", $this->normalizeDate($startDate), $this->normalizeDate($endDate),  $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function getIncomeByClient($clientID, $startDate, $endDate)
     {
         return $this->query("SELECT transactionID, title, amount, date, clientID, linkedTransactionID FROM Transactions WHERE clientID = ? AND date >= ? AND date <= ? ORDER BY date", $clientID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
+    }
+
+    public function getUnspreadIncomeByClient($clientID, $startDate, $endDate)
+    {
+        return $this->query("SELECT transactionID, title, amount, date, clientID, linkedTransactionID, spreadID FROM Transactions WHERE clientID = ? AND date >= ? AND date <= ? AND spreadID is NULL UNION SELECT transactionID, SUBSTRING_INDEX(title, '<', 1) AS title, SUM(amount), date, clientID, linkedTransactionID, spreadID FROM Transactions WHERE clientID = ? AND date >= ? AND date <= ? AND spreadID is not NULL GROUP BY spreadID ORDER BY date", $clientID, $this->normalizeDate($startDate), $this->normalizeDate($endDate), $clientID, $this->normalizeDate($startDate), $this->normalizeDate($endDate));
     }
 
     public function estimateExpensesByCategory($categoryID, $year, $month) {

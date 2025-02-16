@@ -66,25 +66,39 @@ echo "</h3>"
         if (isset($_GET['month'])) {
             $startDate = $_GET['year'] . '-' . $_GET['month'] . '-01';
             $endDate = $_GET['year'] . '-' . $_GET['month'] . '-t';
+
+            if (isset($_GET['cat'])) {
+                $records = $transHelper->getExpensesByCategory($_GET['cat'], $startDate, $endDate);
+            } else if (isset($_GET['client'])) {
+                $records = $transHelper->getIncomeByClient($_GET['client'], $startDate, $endDate);
+            } else if ($_GET['type'] == "expenses") {
+                $records = $transHelper->getExpenses($startDate, $endDate);
+            } else if ($_GET['type'] == "income") {
+                $records = $transHelper->getIncome($startDate, $endDate);
+            } else if ($_GET['type'] == "both") {
+                $records = array_merge($transHelper->getIncome($startDate, $endDate), $transHelper->getExpenses($startDate, $endDate));
+                $dates = array_column($records, 'date');
+                array_multisort($dates, SORT_ASC, $records);
+            }
         } else {
             $startDate = $_GET['year'] . '-01-01';
             $endDate = $_GET['year'] . '-12-t';
+
+            if (isset($_GET['cat'])) {
+                $records = $transHelper->getUnspreadExpensesByCategory($_GET['cat'], $startDate, $endDate);
+            } else if (isset($_GET['client'])) {
+                $records = $transHelper->getUnspreadIncomeByClient($_GET['client'], $startDate, $endDate);
+            } else if ($_GET['type'] == "expenses") {
+                $records = $transHelper->getUnspreadExpenses($startDate, $endDate);
+            } else if ($_GET['type'] == "income") {
+                $records = $transHelper->getUnspreadIncome($startDate, $endDate);
+            } else if ($_GET['type'] == "both") {
+                $records = array_merge($transHelper->getUnspreadIncome($startDate, $endDate), $transHelper->getUnspreadExpenses($startDate, $endDate));
+                $dates = array_column($records, 'date');
+                array_multisort($dates, SORT_ASC, $records);
+            }
         }
 
-        if (isset($_GET['cat'])) {
-            $records = $transHelper->getExpensesByCategory($_GET['cat'], $startDate, $endDate);
-        } else if (isset($_GET['client'])) {
-            $records = $transHelper->getIncomeByClient($_GET['client'], $startDate, $endDate);
-        } else if ($_GET['type'] == "expenses") {
-            $records = $transHelper->getExpenses($startDate, $endDate);
-        } else if ($_GET['type'] == "income") {
-            $records = $transHelper->getIncome($startDate, $endDate);
-        } else if ($_GET['type'] == "both") {
-            $records = array_merge($transHelper->getIncome($startDate, $endDate), $transHelper->getExpenses($startDate, $endDate));
-            $dates = array_column($records, 'date');
-            array_multisort($dates, SORT_ASC, $records);
-
-        }
 
         foreach ($records as $record) {
             if (!is_null($record['irrelevant']) && $record['irrelevant'] == 1) {

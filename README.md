@@ -1,8 +1,6 @@
 # Liquid Books
 ##### A bookkeeping system that helps you manage your small business accounting
 
-![Screenshot](images/year.png)
-
 ## How It Works
 1. Add all of your clients through the `Manage Clients` tab
 2. Add all of your expense categories through the `Manage Categories` tab
@@ -14,8 +12,6 @@
   - Automatically split transactions up across multiple months (ex: quartely invoice, yearly license, etc.)
   - Automatically generated forecasts based off of historical data
   - Automatically attach credit card fees to income transactions
-  
-![Forecast](images/forecast.png)
 
 ## Installation
 1. Run `composer install` inside `./app`

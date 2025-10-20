@@ -25,14 +25,14 @@ if (!empty($_POST)) {
 // Start rendering the content
 ob_start();
 ?>
-    <script>
-        window.onunload = refreshParent;
-        function refreshParent() {
-            window.opener.location.reload();
-        }
-    </script>
 <h1>Create New Transaction</h1>
 <script>
+    window.onunload = refreshParent;
+
+    function refreshParent() {
+        window.opener.location.reload();
+    }
+
     function transactionType() {
         if (document.getElementById('expense').checked) {
             document.getElementById('ifExpense').style.display = 'block';
@@ -117,7 +117,21 @@ ob_start();
     </div>
     <button type="submit" class="btn btn-primary mt-2">Submit</button>
 </form>
+<script>
+    document.getElementById('date').addEventListener('input', function() {
+        const input = this;
+        const selectedDate = new Date(input.value);
+        const currentYear = new Date().getFullYear();
 
+        if (selectedDate.getFullYear() !== currentYear && input.value) {
+            // Add red border if year is not current
+            input.style.border = '2px solid red';
+        } else {
+            // Reset border if year is current or input is empty
+            input.style.border = '';
+        }
+    });
+</script>
 <?php
 $content = ob_get_clean();
 $page->render($content);

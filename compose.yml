@@ -1,7 +1,7 @@
 services:
   liquidbooks-db:
     container_name: liquidbooks-db
-    image: mysql:latest
+    image: mysql:9.6.0
     volumes:
       - liquidbooks_db_data:/var/lib/mysql
       - ./db:/docker-entrypoint-initdb.d

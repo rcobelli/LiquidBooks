@@ -83,12 +83,14 @@ DROP TABLE IF EXISTS `Transactions`;
 
 CREATE TABLE `Transactions` (
   `transactionID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(25) NOT NULL DEFAULT '',
+  `title` varchar(50) NOT NULL DEFAULT '',
   `amount` double NOT NULL,
   `date` date NOT NULL,
   `clientID` int(11) unsigned DEFAULT NULL,
   `categoryID` int(11) unsigned DEFAULT NULL,
   `linkedTransactionID` int(11) unsigned DEFAULT NULL,
+  `irrelevant` tinyint(1) NOT NULL DEFAULT '0',
+  `spreadID` bigint DEFAULT NULL,
   PRIMARY KEY (`transactionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

@@ -21,7 +21,7 @@ function sumTransactions($data) {
         $total += $datum['amount'];
     }
     if ($total < 0) {
-        return "($" . number_format($total,2) . ")";
+        return "($" . number_format(abs($total),2) . ")";
     }
     return "$" . number_format($total,2);
 }
@@ -36,7 +36,7 @@ function totalTransactions($income, $expenses) {
     }
 
     if ($total < 0) {
-        return "($" . number_format($total,2) . ")";
+        return "($" . number_format(abs($total),2) . ")";
     }
     return "$" . number_format($total,2);
 }

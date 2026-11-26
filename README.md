@@ -14,6 +14,6 @@
   - Automatically attach credit card fees to income transactions
 
 ## Installation
-1. Run `composer install` inside `./app`
-2. Run `docker composer up -d`
-3. Visit `localhost:8001`
+1. Run `docker-compose up -d`
+2. Run `docker compose exec liquidbooks-web composer install`
+3. Visit [http://localhost:8001](http://localhost:8001)

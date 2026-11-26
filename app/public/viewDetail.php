@@ -15,15 +15,19 @@ $transHelper = new TransactionHelper($config);
 
 if (!empty($_POST)) {
     if ($transHelper->createTransaction($_POST)) {
-        echo "<script>window.close();</script>";
+        echo "<script>
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.reload();
+            }
+            window.close();
+        </script>";
     } else {
         $errors[] = $transHelper->getErrorMessage();
     }
 } else if ($_GET['action'] == 'delete' && !empty($_GET['item'])) {
     if ($transHelper->deleteTransaction($_GET['item'])) {
         echo "<script>
-            window.onunload = refreshParent;
-            function refreshParent() {
+            if (window.opener && !window.opener.closed) {
                 window.opener.location.reload();
             }
             window.close();

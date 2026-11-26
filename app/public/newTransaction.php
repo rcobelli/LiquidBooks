@@ -15,7 +15,12 @@ $transHelper = new TransactionHelper($config);
 
 if (!empty($_POST)) {
     if ($transHelper->createTransaction($_POST)) {
-        echo "<script>window.close();</script>";
+        echo "<script>
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.reload();
+            }
+            window.close();
+        </script>";
     } else {
         $page->addError($helper->getErrorMessage());
     }
@@ -27,12 +32,6 @@ ob_start();
 ?>
 <h1>Create New Transaction</h1>
 <script>
-    window.onunload = refreshParent;
-
-    function refreshParent() {
-        window.opener.location.reload();
-    }
-
     function transactionType() {
         if (document.getElementById('expense').checked) {
             document.getElementById('ifExpense').style.display = 'block';
